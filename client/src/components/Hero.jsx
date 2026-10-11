@@ -1,125 +1,12 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowDownRight,
   ArrowUpRight,
-  Camera,
 } from "lucide-react";
-
+import { PROFILE_IMAGE } from "../config/profile";
 import "./Hero.css";
 
-let imageCacheBuster = Date.now();
-
 function Hero() {
-  const [profileImage, setProfileImage] = useState(
-    `/uploads/profile.jpg?t=${imageCacheBuster}`
-  );
-
-  const [uploading, setUploading] = useState(false);
-
-  // Load profile image
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const loadProfile = async () => {
-    try {
-      const response = await fetch("/api/profile");
-      if (!response.ok) return;
-
-      const data = await response.json();
-
-      if (data.success && data.profile && data.profile.image) {
-        setProfileImage(
-          `${data.profile.image}?t=${imageCacheBuster}`
-        );
-      }
-    } catch {
-      // Keep static profile image fallback when server is not running
-    }
-  };
-
-  // Change profile image
-  const handleImageChange = async (event) => {
-    const file = event.target.files?.[0];
-
-    if (!file) {
-      return;
-    }
-
-    // Check file type
-    const allowedTypes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/webp",
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-      alert("Please select a JPG, PNG or WEBP image.");
-      event.target.value = "";
-      return;
-    }
-
-    // Check file size
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Image must be smaller than 5MB.");
-      event.target.value = "";
-      return;
-    }
-
-    // Show selected image immediately
-    const previewUrl = URL.createObjectURL(file);
-    setProfileImage(previewUrl);
-
-    const formData = new FormData();
-
-    formData.append("profile", file);
-
-    try {
-      setUploading(true);
-
-      const response = await fetch(
-        "/api/profile",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-
-      console.log("Upload response:", data);
-
-      if (!response.ok || !data.success) {
-        throw new Error(
-          data.message || "Upload failed"
-        );
-      }
-
-      // Load new image from Express
-      imageCacheBuster = Date.now();
-      setProfileImage(
-        `${data.image}?t=${imageCacheBuster}`
-      );
-
-      alert("Profile photo changed successfully!");
-    } catch (error) {
-      console.error("Upload error:", error);
-
-      alert(
-        "Upload failed. Make sure the Express server is running on port 5000."
-      );
-
-      // Restore previous image
-      loadProfile();
-    } finally {
-      setUploading(false);
-
-      event.target.value = "";
-    }
-  };
-
   return (
     <section className="hero" id="home">
       <div className="hero-container">
@@ -180,43 +67,20 @@ function Hero() {
               delay: 0.2,
             }}
           >
-            <label
-              htmlFor="profile-upload"
-              className="hero-photo"
-            >
-
+            <div className="hero-photo">
               <img
-                src={profileImage}
+                src={PROFILE_IMAGE}
                 alt="Vinod M Bhangi"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/profile.jpg";
+                  e.currentTarget.src = PROFILE_IMAGE;
                 }}
               />
-
-              <div className="hero-photo-overlay">
-                <Camera size={20} />
-
-                <span>
-                  {uploading
-                    ? "UPLOADING..."
-                    : "CHANGE PHOTO"}
-                </span>
-              </div>
 
               <div className="hero-photo-ai">
                 AI / DS
               </div>
-
-            </label>
-
-            <input
-              id="profile-upload"
-              type="file"
-              accept=".jpg,.jpeg,.png,.webp"
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-            />
+            </div>
 
             <div className="hero-photo-tag">
               <span>01</span>
@@ -246,37 +110,23 @@ function Hero() {
 
             <a
               href="#projects"
-              className="hero-primary-btn"
+              className="hero-btn-primary"
             >
-              <span>View Projects</span>
-              <ArrowUpRight size={18} />
+              <span>Explore Work</span>
+              <ArrowDownRight size={18} />
             </a>
 
             <a
               href="#contact"
-              className="hero-secondary-btn"
+              className="hero-btn-secondary"
             >
-              <span>Contact Me</span>
-              <ArrowUpRight size={18} />
+              <span>Get In Touch</span>
+              <ArrowUpRight size={16} />
             </a>
 
           </div>
-        </div>
 
-        {/* SCROLL */}
-        <motion.div
-          className="hero-scroll"
-          animate={{
-            y: [0, 6, 0],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-          }}
-        >
-          <span>SCROLL</span>
-          <ArrowDownRight size={17} />
-        </motion.div>
+        </div>
 
       </div>
     </section>

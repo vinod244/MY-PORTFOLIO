@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { PROFILE_IMAGE } from "../config/profile";
 import "./About.css";
 
 function About() {
@@ -20,7 +21,7 @@ function About() {
         {/* PROFILE IMAGE */}
         <div className="about-profile-wrapper" style={{ marginBottom: "40px" }}>
           <img
-            src="/profile.jpg"
+            src={PROFILE_IMAGE}
             alt="Vinod M Bhangi"
             style={{
               width: "160px",
@@ -29,6 +30,10 @@ function About() {
               objectFit: "cover",
               border: "2px solid rgba(255, 255, 255, 0.2)",
               display: "block"
+            }}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = PROFILE_IMAGE;
             }}
           />
         </div>
