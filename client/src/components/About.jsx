@@ -17,10 +17,10 @@ function About() {
           02 — ABOUT ME
         </div>
 
-        {/* LOCKED PROFILE IMAGE */}
+        {/* PROFILE IMAGE */}
         <div className="about-profile-wrapper" style={{ marginBottom: "40px" }}>
           <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop"
+            src="/profile.jpg"
             alt="Vinod M Bhangi"
             style={{
               width: "160px",

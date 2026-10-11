@@ -1,5 +1,7 @@
 node_modules/
 .env
 portfolio.db
-uploads/
+/uploads/
+/server/uploads/
 client/dist/
+!client/public/uploads/

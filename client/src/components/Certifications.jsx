@@ -13,10 +13,57 @@ import "./Certifications.css";
 
 function Certifications() {
   // ========================================
+  // DEFAULT CERTIFICATES FALLBACK (WORKS OFFLINE / LIVE DEPLOYMENT)
+  // ========================================
+
+  const DEFAULT_CERTIFICATES = [
+    {
+      id: 1,
+      title: "GenAI Powered Data Analytics",
+      organization: "TATA",
+      date: "August 1st, 2026",
+      description: "Completed the Tata × Forage GenAI Powered Data Analytics Job Simulation, gaining practical experience in data analysis, AI-based risk prediction, business reporting, and data-driven decision-making.",
+      image: "/uploads/certificates/certificate-1786630075531.jpeg",
+    },
+    {
+      id: 2,
+      title: "Artificial intelligence Profesional ",
+      organization: "UNIFIED MENTOR",
+      date: "August 1st, 2026",
+      description: "Gained foundational knowledge of Artificial Intelligence and Machine Learning concepts. Learned practical approaches to AI-based problem solving and real-world applications. Developed skills in data analysis, logical thinking, and AI technologies.",
+      image: "/uploads/certificates/certificate-1786630369413.jpeg",
+    },
+    {
+      id: 4,
+      title: "Python 3",
+      organization: "EDUCATIVE CERTIFIED ",
+      date: "16-05-2026",
+      description: "Gained foundational knowledge of Python programming, including variables, data types, control flow, loops, functions, and problem-solving through hands-on coding exercises.",
+      image: "/uploads/certificates/certificate-1786630735599.jpeg",
+    },
+    {
+      id: 5,
+      title: "Data Analytics Job Simulation",
+      organization: "Deloitte",
+      date: "August 30th, 2026",
+      description: "Completed Deloitte’s Data Analytics Job Simulation, gaining practical experience in data analysis and forensic technology while solving real-world business-related tasks.",
+      image: "/uploads/certificates/certificate-1788154928745.jpeg",
+    },
+    {
+      id: 6,
+      title: "Python with Data Analytics ",
+      organization: "iFutureTech",
+      date: "05-12-2025",
+      description: "Learned the fundamentals of Python for Data Analysis, including using Python to work with datasets, clean and organize data, perform basic analysis, and extract meaningful insights, applying Python programming concepts to real-world data analysis tasks.",
+      image: "/uploads/certificates/certificate-1788757666363.jpeg",
+    },
+  ];
+
+  // ========================================
   // STATES
   // ========================================
 
-  const [certificates, setCertificates] = useState([]);
+  const [certificates, setCertificates] = useState(DEFAULT_CERTIFICATES);
 
   const [showForm, setShowForm] = useState(false);
 
@@ -42,17 +89,15 @@ function Certifications() {
   const loadCertificates = async () => {
     try {
       const response = await fetch("/api/certificates");
+      if (!response.ok) return;
 
       const data = await response.json();
 
-      if (data.success) {
+      if (data.success && Array.isArray(data.certificates) && data.certificates.length > 0) {
         setCertificates(data.certificates);
       }
-    } catch (error) {
-      console.error(
-        "Error loading certificates:",
-        error
-      );
+    } catch {
+      // Keep DEFAULT_CERTIFICATES when API server is not running
     }
   };
 

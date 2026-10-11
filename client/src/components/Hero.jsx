@@ -25,6 +25,7 @@ function Hero() {
   const loadProfile = async () => {
     try {
       const response = await fetch("/api/profile");
+      if (!response.ok) return;
 
       const data = await response.json();
 
@@ -33,8 +34,8 @@ function Hero() {
           `${data.profile.image}?t=${imageCacheBuster}`
         );
       }
-    } catch (error) {
-      console.error("Profile loading error:", error);
+    } catch {
+      // Keep static profile image fallback when server is not running
     }
   };
 
@@ -187,6 +188,10 @@ function Hero() {
               <img
                 src={profileImage}
                 alt="Vinod M Bhangi"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/profile.jpg";
+                }}
               />
 
               <div className="hero-photo-overlay">
